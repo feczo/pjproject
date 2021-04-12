@@ -20,13 +20,9 @@
 #
 
 """Multimedia communication client library based on SIP protocol.
-
 This implements a fully featured multimedia communication client 
 library based on PJSIP stack (http://www.pjsip.org)
-
-
 1. FEATURES
-
   - Session Initiation Protocol (SIP) features:
      - Basic registration and call
      - Multiple accounts
@@ -48,13 +44,9 @@ library based on PJSIP stack (http://www.pjsip.org)
      - TURN
      - ICE
  
-
 2. USING
-
 See http://www.pjsip.org/trac/wiki/Python_SIP_Tutorial for a more thorough
 tutorial. The paragraphs below explain basic tasks on using this module.
-
-
 """
 import _pjsua
 import thread
@@ -66,11 +58,9 @@ class Error:
     """Error exception class.
     
     Member documentation:
-
     op_name  -- name of the operation that generated this error.
     obj      -- the object that generated this error.
     err_code -- the error code.
-
     """
     op_name = ""
     obj = None
@@ -137,10 +127,8 @@ class CallRole:
     """Call role constants.
     
     Member documentation:
-
     CALLER  -- role is caller
     CALLEE  -- role is callee
-
     """
     CALLER = 0
     CALLEE = 1
@@ -149,7 +137,6 @@ class CallState:
     """Call state constants.
     
     Member documentation:
-
     NULL            -- call is not initialized.
     CALLING         -- initial INVITE is sent.
     INCOMING        -- initial INVITE is received.
@@ -171,7 +158,6 @@ class MediaState:
     """Call media state constants.
     
     Member documentation:
-
     NULL        -- media is not available.
     ACTIVE      -- media is active.
     LOCAL_HOLD  -- media is put on-hold by local party.
@@ -189,7 +175,6 @@ class MediaDir:
     """Media direction constants.
     
     Member documentation:
-
     NULL              -- media is not active
     ENCODING          -- media is active in transmit/encoding direction only.
     DECODING          -- media is active in receive/decoding direction only
@@ -205,7 +190,6 @@ class PresenceActivity:
     """Presence activities constants.
     
     Member documentation:
-
     UNKNOWN -- the person activity is unknown
     AWAY    -- the person is currently away
     BUSY    -- the person is currently engaging in other activity
@@ -217,7 +201,6 @@ class PresenceActivity:
 
 class SubscriptionState:
     """Presence subscription state constants.
-
     """
     NULL = 0
     SENT = 1
@@ -245,7 +228,6 @@ class UAConfig:
     """User agent configuration to be specified in Lib.init().
     
     Member documentation:
-
     max_calls   -- maximum number of calls to be supported.
     nameserver  -- list of nameserver hostnames or IP addresses. Nameserver
                    must be configured if DNS SRV resolution is desired.
@@ -284,7 +266,6 @@ class LogConfig:
     """Logging configuration to be specified in Lib.init().
     
     Member documentation:
-
     msg_logging   -- specify if SIP messages should be logged. Set to
                      True.
     level         -- specify the input verbosity level.
@@ -293,10 +274,8 @@ class LogConfig:
     filename      -- specify the log filename.
     callback      -- specify callback to be called to write the logging
                      messages. Sample function:
-
                      def log_cb(level, str, len):
                         print str,
-
     """
     msg_logging = True
     level = 5
@@ -466,7 +445,6 @@ class TransportConfig:
     """SIP transport configuration class.
     
     Member configuration:
-
     port        -- port number.
     bound_addr  -- optionally specify the address to bind the socket to.
                    Default is empty to bind to INADDR_ANY.
@@ -548,7 +526,6 @@ class TransportInfo:
     """SIP transport info.
     
     Member documentation:
-
     type        -- transport type, from TransportType constants.
     description -- longer description for this transport.
     is_reliable -- True if transport is reliable.
@@ -619,7 +596,6 @@ class Transport:
 
     def close(self, force=False):
         """Close and destroy this transport.
-
         Keyword argument:
         force   -- force deletion of this transport (not recommended).
         """
@@ -630,16 +606,13 @@ class Transport:
 
 class SIPUri:
     """Helper class to parse the most important components of SIP URI.
-
     Member documentation:
-
     scheme    -- URI scheme ("sip" or "sips")
     user      -- user part of the URI (may be empty)
     host      -- host name part
     port      -- optional port number (zero if port is not specified).
     transport -- transport parameter, or empty if transport is not
                  specified.
-
     """
     scheme = ""
     user = ""
@@ -653,20 +626,16 @@ class SIPUri:
 
     def decode(self, uri):
         """Parse SIP URL.
-
         Keyword argument:
         uri -- the URI string.
-
         """
         self.scheme, self.user, self.host, self.port, self.transport = \
             _pjsua.parse_simple_uri(uri)
 
     def encode(self):
         """Encode this object into SIP URI string.
-
         Return:
             URI string.
-
         """
         output = self.scheme + ":"
         if self.user and len(self.user):
@@ -683,7 +652,6 @@ class AuthCred:
     """Authentication credential for SIP or TURN account.
     
     Member documentation:
-
     scheme      -- authentication scheme (default is "Digest")
     realm       -- realm
     username    -- username
@@ -706,9 +674,7 @@ class AuthCred:
 
 class AccountConfig:
     """ This describes account configuration to create an account.
-
     Member documentation:
-
     priority                -- account priority for matching incoming
                                messages.
     id                      -- SIP URI of this account. This setting is
@@ -784,7 +750,6 @@ class AccountConfig:
         """
         Construct account config. If domain argument is specified, 
         a typical configuration will be built.
-
         Keyword arguments:
         domain    -- domain name of the server.
         username  -- user name.
@@ -796,7 +761,6 @@ class AccountConfig:
         proxy     -- the proxy URI. If domain name is specified
                      and this argument is empty, the proxy URI
                      will be constructed from the domain name.
-
         """
         default = _pjsua.acc_config_default()
         self._cvt_from_pjsua(default)
@@ -810,7 +774,6 @@ class AccountConfig:
         """
         Construct account config. If domain argument is specified, 
         a typical configuration will be built.
-
         Keyword arguments:
         domain    -- domain name of the server.
         username  -- user name.
@@ -822,7 +785,6 @@ class AccountConfig:
         proxy     -- the proxy URI. If domain name is specified
                      and this argument is empty, the proxy URI
                      will be constructed from the domain name.
-
         """
         if display != "":
             display = display + " "
@@ -912,9 +874,7 @@ class AccountConfig:
 class AccountInfo:
     """This describes Account info. Application retrives account info
     with Account.info().
-
     Member documentation:
-
     is_default      -- True if this is the default account.
     uri             -- the account URI.
     reg_active      -- True if registration is active for this account.
@@ -928,7 +888,6 @@ class AccountInfo:
     online_status   -- the account's presence online status, True if it's 
                        publishing itself as online.
     online_text     -- the account's presence status text.
-
     """
     is_default = False
     uri = ""
@@ -952,15 +911,11 @@ class AccountInfo:
 # Account callback
 class AccountCallback:
     """Class to receive notifications on account's events.
-
     Derive a class from this class and register it to the Account object
     using Account.set_callback() to start receiving events from the Account
     object.
-
     Member documentation:
-
     account     -- the Account object.
-
     """
     account = None
 
@@ -983,12 +938,10 @@ class AccountCallback:
 
     def on_incoming_call(self, call):
         """Notification about incoming call.
-
         Application should implement one of on_incoming_call() or
         on_incoming_call2(), otherwise, the default behavior is to
         reject the call with default status code. Note that if both are
         implemented, only on_incoming_call2() will be called.
-
         Keyword arguments:
         call    -- the new incoming call
         """
@@ -996,12 +949,10 @@ class AccountCallback:
 
     def on_incoming_call2(self, call, rdata):
         """Notification about incoming call, with received SIP message info.
-
         Application should implement one of on_incoming_call() or
         on_incoming_call2(), otherwise, the default behavior is to
         reject the call with default status code. Note that if both are
         implemented, only on_incoming_call2() will be called.
-
         Keyword arguments:
         call    -- the new incoming call
         rdata   -- the received message
@@ -1014,14 +965,12 @@ class AccountCallback:
         Application may use this callback to authorize the incoming 
         subscribe request (e.g. ask user permission if the request 
         should be granted)
-
         Keyword arguments:
         buddy       -- The buddy object, if buddy is found. Otherwise
                        the value is None.
         from_uri    -- The URI string of the sender.
         pres_obj    -- Opaque presence subscription object, which is
                        needed by Account.pres_notify()
-
         Return:
             Tuple (code, reason), where:
              code:      The status code. If code is >= 300, the
@@ -1039,13 +988,11 @@ class AccountCallback:
         """
         Notification that incoming instant message is received on
         this account.
-
         Keyword arguments:
         from_uri   -- sender's URI
         contact    -- sender's Contact URI
         mime_type  -- MIME type of the instant message body
         body       -- the instant message body
-
         """
         pass
 
@@ -1053,21 +1000,18 @@ class AccountCallback:
         """
         Notification about the delivery status of previously sent
         instant message.
-
         Keyword arguments:
         to_uri  -- the destination URI of the message
         body    -- the message body
         im_id   -- message ID
         code    -- SIP status code
         reason  -- SIP reason phrase
-
         """
         pass
 
     def on_typing(self, from_uri, contact, is_typing):
         """
         Notification that remote is typing or stop typing.
-
         Keyword arguments:
         buddy     -- Buddy object for the sender, if found. Otherwise
                      this will be None
@@ -1075,7 +1019,6 @@ class AccountCallback:
         contact   -- sender's contact URI
         is_typing -- boolean to indicate whether remote is currently
                      typing an instant message.
-
         """
         pass
 
@@ -1084,11 +1027,9 @@ class AccountCallback:
         Notification about change in Message Summary / Message Waiting
         Indication (RFC 3842) status. MWI subscription must be enabled
         in the account config to receive this notification.
-
         Keyword arguments:
         body      -- String containing message body as received in the
                      NOTIFY request.
-
         """
         pass
 
@@ -1096,11 +1037,9 @@ class AccountCallback:
 
 class Account:
     """This describes SIP account class.
-
     PJSUA accounts provide identity (or identities) of the user who is 
     currently using the application. In SIP terms, the identity is used 
     as the From header in outgoing requests.
-
     Account may or may not have client registration associated with it. 
     An account is also associated with route set and some authentication 
     credentials, which are used when sending SIP request messages using 
@@ -1108,17 +1047,14 @@ class Account:
     will be reported to remote peer when they subscribe to the account's 
     presence, or which is published to a presence server if presence 
     publication is enabled for the account.
-
     Account is created with Lib.create_account(). At least one account 
     MUST be created. If no user association is required, application can 
     create a userless account by calling Lib.create_account_for_transport().
     A userless account identifies local endpoint instead of a particular 
     user, and it correspond with a particular transport instance.
-
     Also one account must be set as the default account, which is used as 
     the account to use when PJSUA fails to match a request with any other
     accounts.
-
     """
     _id = -1        
     _lib = None
@@ -1128,7 +1064,6 @@ class Account:
     def __init__(self, lib, id, cb=None):
         """Construct this class. This is normally called by Lib class and
         not by application.
-
         Keyword arguments:
         lib -- the Lib instance.
         id  -- the pjsua account ID.
@@ -1163,17 +1098,14 @@ class Account:
     def is_valid(self):
         """
         Check if this account is still valid.
-
         """
         lck = self._lib().auto_lock()
         return _pjsua.acc_is_valid(self._id)
 
     def set_callback(self, cb):
         """Register callback to receive notifications from this object.
-
         Keyword argument:
         cb  -- AccountCallback instance.
-
         """
         if cb:
             self._cb = cb
@@ -1192,7 +1124,6 @@ class Account:
 
     def is_default(self):
         """ Check if this account is the default account.
-
         """
         lck = self._lib().auto_lock()
         def_id = _pjsua.acc_get_default()
@@ -1211,10 +1142,8 @@ class Account:
 
     def set_basic_status(self, is_online):
         """ Set basic presence status of this account.
-
         Keyword argument:
         is_online   -- boolean to indicate basic presence availability.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.acc_set_online_status(self._id, is_online)
@@ -1231,7 +1160,6 @@ class Account:
         pres_text   -- optional string to convey additional information about
                        the activity (such as "On the phone")
         rpid_id     -- optional string to be placed as RPID ID. 
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.acc_set_online_status2(self._id, is_online, activity,
@@ -1240,11 +1168,9 @@ class Account:
 
     def set_registration(self, renew):
         """Manually renew registration or unregister from the server.
-
         Keyword argument:
         renew   -- boolean to indicate whether registration is renewed.
                    Setting this value for False will trigger unregistration.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.acc_set_registration(self._id, renew)
@@ -1253,10 +1179,8 @@ class Account:
     def set_transport(self, transport):
         """Set this account to only use the specified transport to send
         outgoing requests.
-
         Keyword argument:
         transport   -- Transport object.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.acc_set_transport(self._id, transport._id)
@@ -1264,16 +1188,14 @@ class Account:
 
     def make_call(self, dst_uri, cb=None, hdr_list=None):
         """Make outgoing call to the specified URI.
-
         Keyword arguments:
         dst_uri  -- Destination SIP URI.
         cb       -- CallCallback instance to be installed to the newly
                     created Call object. If this CallCallback is not
                     specified (i.e. None is given), it must be installed
                     later using call.set_callback().
-        hdr_list -- Optional list of headers to be sent with outgoing
-                    INVITE
-
+        hdr_list -- Optional list of header (key, value) tuples to be
+                    sent with outgoing INVITE
         Return:
             Call instance.
         """
@@ -1287,14 +1209,12 @@ class Account:
 
     def add_buddy(self, uri, cb=None):
         """Add new buddy.
-
         Keyword argument:
         uri     -- SIP URI of the buddy
         cb      -- BuddyCallback instance to be installed to the newly
                    created Buddy object. If this callback is not specified
                    (i.e. None is given), it must be installed later using
                    buddy.set_callback().
-
         Return:
             Buddy object
         """
@@ -1316,7 +1236,7 @@ class Account:
                        callback
         state       -- Subscription state, from SubscriptionState
         reason      -- Optional reason phrase.
-        hdr_list    -- Optional header list.
+        hdr_list    -- Optional list of header (key, value) tuples.
         """
         lck = self._lib().auto_lock()
         _pjsua.acc_pres_notify(self._id, pres_obj, state, reason, 
@@ -1325,7 +1245,6 @@ class Account:
     def send_pager(self, uri, text, im_id=0, content_type="text/plain", \
                    hdr_list=None):
         """Send instant message to arbitrary URI.
-
         Keyword arguments:
         text         -- Instant message to be sent
         uri          -- URI to send the Instant Message to.
@@ -1333,9 +1252,8 @@ class Account:
                         instant message when delivery status callback
                         is called.
         content_type -- MIME type identifying the instant message
-        hdr_list     -- Optional list of headers to be sent with the
-                        request.
-
+        hdr_list     -- Optional list of header (key, value) tuples
+                        to be sent with the request.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.im_send(self._id, uri, \
@@ -1346,14 +1264,10 @@ class Account:
 
 class CallCallback:
     """Class to receive event notification from Call objects. 
-
     Use Call.set_callback() method to install instance of this callback 
     class to receive event notifications from the call object.
-
     Member documentation:
-
     call    -- the Call object.
-
     """
     call = None
 
@@ -1371,47 +1285,38 @@ class CallCallback:
 
     def on_state(self):
         """Notification that the call's state has changed.
-
         """
         pass
 
     def on_media_state(self):
         """Notification that the call's media state has changed.
-
         """
         pass
 
     def on_dtmf_digit(self, digits):
         """Notification on incoming DTMF digits.
-
         Keyword argument:
         digits  -- string containing the received digits.
-
         """
         pass
 
     def on_transfer_request(self, dst, code):
         """Notification that call is being transferred by remote party. 
-
         Application can decide to accept/reject transfer request by returning
         code greater than or equal to 500. The default behavior is to accept 
         the transfer by returning 202.
-
         Keyword arguments:
         dst     -- string containing the destination URI
         code    -- the suggested status code to return to accept the request.
-
         Return:
         the callback should return 202 to accept the request, or 300-699 to
         reject the request.
-
         """
         return code
 
     def on_transfer_status(self, code, reason, final, cont):
         """
         Notification about the status of previous call transfer request. 
-
         Keyword arguments:
         code    -- SIP status code to indicate completion status.
         text    -- SIP status reason phrase.
@@ -1419,27 +1324,21 @@ class CallCallback:
                    notifications will be sent for this call transfer
                    status.
         cont    -- suggested return value.
-
         Return:
         If the callback returns false then no further notification will
         be sent for the transfer request for this call.
-
         """
         return cont
 
     def on_replace_request(self, code, reason):
         """Notification when incoming INVITE with Replaces header is received. 
-
         Application may reject the request by returning value greather than
         or equal to 500. The default behavior is to accept the request.
-
         Keyword arguments:
         code    -- default status code to return
         reason  -- default reason phrase to return
-
         Return:
         The callback should return (code, reason) tuple.
-
         """
         return code, reason
 
@@ -1447,7 +1346,6 @@ class CallCallback:
         """
         Notification that this call will be replaced with new_call. 
         After this callback is called, this call will be disconnected.
-
         Keyword arguments:
         new_call    -- the new call that will replace this call.
         """
@@ -1457,11 +1355,9 @@ class CallCallback:
         """
         Notification that incoming instant message is received on
         this call.
-
         Keyword arguments:
         mime_type  -- MIME type of the instant message body.
         body       -- the instant message body.
-
         """
         pass
 
@@ -1469,35 +1365,28 @@ class CallCallback:
         """
         Notification about the delivery status of previously sent
         instant message.
-
         Keyword arguments:
         body    -- message body
         im_id   -- message ID
         code    -- SIP status code
         reason  -- SIP reason phrase
-
         """
         pass
 
     def on_typing(self, is_typing):
         """
         Notification that remote is typing or stop typing.
-
         Keyword arguments:
         is_typing -- boolean to indicate whether remote is currently
                      typing an instant message.
-
         """
         pass
 
 
 class CallInfo:
     """This structure contains various information about Call.
-
     Application may retrieve this information with Call.info().
-
     Member documentation:
-
     role            -- CallRole
     account         -- Account object.
     uri             -- SIP URI of local account.
@@ -1557,7 +1446,6 @@ class CallInfo:
 
 class Call:
     """This class represents SIP call.
-
     Application initiates outgoing call with Account.make_call(), and
     incoming calls are reported in AccountCallback.on_incoming_call().
     """
@@ -1594,7 +1482,6 @@ class Call:
     def set_callback(self, cb):
         """
         Set callback object to retrieve event notifications from this call.
-
         Keyword arguments:
         cb  -- CallCallback instance.
         """
@@ -1632,14 +1519,12 @@ class Call:
     def answer(self, code=200, reason="", hdr_list=None):
         """
         Send provisional or final response to incoming call.
-
         Keyword arguments:
         code     -- SIP status code.
         reason   -- Reason phrase. Put empty to send default reason
                     phrase for the status code.
-        hdr_list -- Optional list of headers to be sent with the
-                    INVITE response.
-
+        hdr_list -- Optional list of header (key, value) tuples
+                    to be sent with the INVITE response.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_answer(self._id, code, reason, 
@@ -1649,14 +1534,12 @@ class Call:
     def hangup(self, code=603, reason="", hdr_list=None):
         """
         Terminate the call.
-
         Keyword arguments:
         code     -- SIP status code.
         reason   -- Reason phrase. Put empty to send default reason
                     phrase for the status code.
-        hdr_list -- Optional list of headers to be sent with the
-                    message.
-
+        hdr_list -- Optional list of header (key, value) tuples to
+                    be sent with the message.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_hangup(self._id, code, reason, 
@@ -1666,10 +1549,9 @@ class Call:
     def hold(self, hdr_list=None):
         """
         Put the call on hold.
-
         Keyword arguments:
-        hdr_list -- Optional list of headers to be sent with the
-                    message.
+        hdr_list -- Optional list of header (key, value) tuples
+                    to be sent with the message.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_set_hold(self._id, Lib._create_msg_data(hdr_list))
@@ -1678,11 +1560,9 @@ class Call:
     def unhold(self, hdr_list=None):
         """
         Release the call from hold.
-
         Keyword arguments:
-        hdr_list -- Optional list of headers to be sent with the
-                    message.
-
+        hdr_list -- Optional list of header (key, value) tuples
+                    to be sent with the message.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_reinvite(self._id, True, 
@@ -1692,11 +1572,9 @@ class Call:
     def reinvite(self, hdr_list=None):
         """
         Send re-INVITE and optionally offer new codecs to use.
-
         Keyword arguments:
-        hdr_list   -- Optional list of headers to be sent with the
-                      message.
-
+        hdr_list   -- Optional list of header (key, value) tuples
+                      to be sent with the message.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_reinvite(self._id, True, 
@@ -1706,12 +1584,10 @@ class Call:
     def update(self, hdr_list=None, options=0):
         """
         Send UPDATE and optionally offer new codecs to use.
-
         Keyword arguments:
-        hdr_list   -- Optional list of headers to be sent with the
-                      message.
+        hdr_list   -- Optional list of header (key, value) tuples
+                      to be sent with the message.
         options    -- Must be zero for now.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_update(self._id, options, 
@@ -1721,12 +1597,10 @@ class Call:
     def transfer(self, dest_uri, hdr_list=None):
         """
         Transfer the call to new destination.
-
         Keyword arguments:
         dest_uri -- Specify the SIP URI to transfer the call to.
-        hdr_list -- Optional list of headers to be sent with the
-                    message.
-
+        hdr_list -- Optional list of header (key, value) tuples
+                    to be sent with the message.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_xfer(self._id, dest_uri, 
@@ -1736,13 +1610,11 @@ class Call:
     def transfer_to_call(self, call, hdr_list=None, options=0):
         """
         Attended call transfer.
-
         Keyword arguments:
         call     -- The Call object to transfer call to.
-        hdr_list -- Optional list of headers to be sent with the
-                    message.
+        hdr_list -- Optional list of header (key, value) tuples
+                    to be sent with the message.
         options  -- Must be zero for now.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_xfer_replaces(self._id, call._id, options,
@@ -1752,10 +1624,8 @@ class Call:
     def dial_dtmf(self, digits):
         """
         Send DTMF digits with RTP event package.
-
         Keyword arguments:
         digits  -- DTMF digit string.
-
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_dial_dtmf(self._id, digits)
@@ -1769,14 +1639,13 @@ class Call:
         This is useful for example to send INFO request. Note that this 
         function should not be used to send request that will change the 
         call state such as CANCEL or BYE.
-
         Keyword arguments:
         method       -- SIP method name.
-        hdr_list     -- Optional header list to be sent with the request.
+        hdr_list     -- Optional list of header (key, value) tuples
+                        to be sent with the request.
         content_type -- Content type to describe the body, if the body
                         is present
         body         -- Optional SIP message body.
-
         """
         lck = self._lib().auto_lock()
         if hdr_list or body:
@@ -1796,16 +1665,14 @@ class Call:
     def send_pager(self, text, im_id=0, content_type="text/plain", 
                    hdr_list=None):
         """Send instant message inside a call.
-
         Keyword arguments:
         text         -- Instant message to be sent
         im_id        -- Optional instant message ID to identify this
                         instant message when delivery status callback
                         is called.
         content_type -- MIME type identifying the instant message
-        hdr_list     -- Optional list of headers to be sent with the
-                        request.
-
+        hdr_list     -- Optional list of header (key, value) tuples
+                        to be sent with the request.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.call_send_im(self._id, \
@@ -1818,9 +1685,7 @@ class Call:
 class BuddyInfo:
     """This class contains information about Buddy. Application may 
     retrieve this information by calling Buddy.info().
-
     Member documentation:
-
     uri             -- the Buddy URI.
     contact         -- the Buddy Contact URI, if available.
     online_status   -- the presence online status.
@@ -1860,9 +1725,7 @@ class BuddyCallback:
     """This class can be used to receive notifications about Buddy's
     presence status change. Application needs to derive a class from
     this class, and register the instance with Buddy.set_callback().
-
     Member documentation:
-
     buddy   -- the Buddy object.
     """
     buddy = None
@@ -1886,41 +1749,34 @@ class BuddyCallback:
     def on_pager(self, mime_type, body):
         """Notification that incoming instant message is received from
         this buddy.
-
         Keyword arguments:
         mime_type  -- MIME type of the instant message body
         body       -- the instant message body
-
         """
         pass
 
     def on_pager_status(self, body, im_id, code, reason):
         """Notification about the delivery status of previously sent
         instant message.
-
         Keyword arguments:
         body    -- the message body
         im_id   -- message ID
         code    -- SIP status code
         reason  -- SIP reason phrase
-
         """
         pass
 
     def on_typing(self, is_typing):
         """Notification that remote is typing or stop typing.
-
         Keyword arguments:
         is_typing -- boolean to indicate whether remote is currently
                      typing an instant message.
-
         """
         pass
 
 
 class Buddy:
     """A Buddy represents person or remote agent.
-
     This class provides functions to subscribe to buddy's presence and
     to send or receive instant messages from the buddy.
     """
@@ -1956,7 +1812,6 @@ class Buddy:
 
     def set_callback(self, cb):
         """Install callback to receive notifications from this object.
-
         Keyword argument:
         cb  -- BuddyCallback instance.
         """
@@ -1995,16 +1850,14 @@ class Buddy:
     def send_pager(self, text, im_id=0, content_type="text/plain", \
                    hdr_list=None):
         """Send instant message to remote buddy.
-
         Keyword arguments:
         text         -- Instant message to be sent
         im_id        -- Optional instant message ID to identify this
                         instant message when delivery status callback
                         is called.
         content_type -- MIME type identifying the instant message
-        hdr_list     -- Optional list of headers to be sent with the
-                        request.
-
+        hdr_list     -- Optional list of header (key, value) tuples
+                        to be sent with the request.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.im_send(self._acc()._id, self.info().uri, \
@@ -2015,12 +1868,10 @@ class Buddy:
 
     def send_typing_ind(self, is_typing=True, hdr_list=None):
         """Send typing indication to remote buddy.
-
         Keyword argument:
         is_typing -- boolean to indicate wheter user is typing.
-        hdr_list  -- Optional list of headers to be sent with the
-                     request.
-
+        hdr_list  -- Optional list of header (key, value) tuples
+                     to be sent with the request.
         """
         lck = self._lib().auto_lock()
         err = _pjsua.im_typing(self._acc()._id, self.info().uri, \
@@ -2032,7 +1883,6 @@ class Buddy:
 # Sound device info
 class SoundDeviceInfo:
     """This described the sound device info.
-
     Member documentation:
     name                -- device name.
     input_channels      -- number of capture channels supported.
@@ -2054,7 +1904,6 @@ class SoundDeviceInfo:
 # Codec info
 class CodecInfo:
     """This describes codec info.
-
     Member documentation:
     name            -- codec name
     priority        -- codec priority (0-255)
@@ -2103,9 +1952,7 @@ class CodecInfo:
 # Codec parameter
 class CodecParameter:
     """This specifies various parameters that can be configured for codec.
-
     Member documentation:
-
     ptime       -- specify the outgoing RTP packet length in milliseconds.
     vad_enabled -- specify if VAD should be enabled.
     plc_enabled -- specify if PLC should be enabled.
@@ -2186,12 +2033,10 @@ class Lib:
     def init(self, ua_cfg=None, log_cfg=None, media_cfg=None):
         """
         Initialize pjsua with the specified configurations.
-
         Keyword arguments:
         ua_cfg      -- optional UAConfig instance
         log_cfg     -- optional LogConfig instance
         media_cfg   -- optional MediaConfig instance
-
         """
         if not ua_cfg: ua_cfg = UAConfig()
         if not log_cfg: log_cfg = LogConfig()
@@ -2233,11 +2078,9 @@ class Lib:
 
     def start(self, with_thread=True):
         """Start the library. 
-
         Keyword argument:
         with_thread -- specify whether the module should create worker
                        thread.
-
         """
         lck = self.auto_lock()
         err = _pjsua.start()
@@ -2251,10 +2094,8 @@ class Lib:
         
         Application must poll the stack periodically if worker thread
         is disable when starting the library.
-
         Keyword argument:
         timeout -- in milliseconds.
-
         """
         lck = self.auto_lock()
         return _pjsua.handle_events(timeout)
@@ -2262,10 +2103,8 @@ class Lib:
     def thread_register(self, name):
         """Register external threads (threads that are not created by PJSIP,
         such as threads that are created by Python API) to PJSIP.
-
         The call must be made from the new thread before calling any pjlib
         functions.
-
         Keyword arguments:
         name -- Non descriptive name for the thread
         """
@@ -2282,7 +2121,6 @@ class Lib:
         Return:
             0 is the the URI is valid, otherwise the appropriate error 
             code is returned.
-
         """
         lck = self.auto_lock()
         return _pjsua.verify_sip_url(sip_url)
@@ -2293,10 +2131,8 @@ class Lib:
         Keyword arguments:
         type    -- transport type from TransportType constant.
         cfg     -- TransportConfig instance
-
         Return:
             Transport object
-
         """
         lck = self.auto_lock()
         if not cfg: cfg=TransportConfig()
@@ -2307,16 +2143,13 @@ class Lib:
     def create_account(self, acc_config, set_default=True, cb=None):
         """
         Create a new local pjsua account using the specified configuration.
-
         Keyword arguments:
         acc_config  -- AccountConfig
         set_default -- boolean to specify whether to use this as the
                        default account.
         cb          -- AccountCallback instance.
-
         Return:
             Account instance
-
         """
         lck = self.auto_lock()
         err, acc_id = _pjsua.acc_add(acc_config._cvt_to_pjsua(), set_default)
@@ -2326,16 +2159,13 @@ class Lib:
     def create_account_for_transport(self, transport, set_default=True,
                                      cb=None):
         """Create a new local pjsua transport for the specified transport.
-
         Keyword arguments:
         transport   -- the Transport instance.
         set_default -- boolean to specify whether to use this as the
                        default account.
         cb          -- AccountCallback instance.
-
         Return:
             Account instance
-
         """
         lck = self.auto_lock()
         err, acc_id = _pjsua.acc_add_local(transport._id, set_default)
@@ -2344,11 +2174,9 @@ class Lib:
 
     def modify_account(self, acc_id, acc_config):
         """Modify configuration of a pjsua account.
-
         Keyword arguments:
         acc_id      -- ID of the account to be modified.
         acc_config  -- New account configuration.
-
         """
         lck = self.auto_lock()
         err = _pjsua.acc_modify(acc_id, acc_config._cvt_to_pjsua())
@@ -2356,7 +2184,6 @@ class Lib:
 
     def hangup_all(self):
         """Hangup all calls.
-
         """
         lck = self.auto_lock()
         _pjsua.call_hangup_all()
@@ -2365,7 +2192,6 @@ class Lib:
 
     def enum_snd_dev(self):
         """Enumerate sound devices in the system.
-
         Return:
             list of SoundDeviceInfo. The index of the element specifies
             the device ID for the device.
@@ -2379,7 +2205,6 @@ class Lib:
 
     def get_snd_dev(self):
         """Get the device IDs of current sound devices used by pjsua.
-
         Return:
             (capture_dev_id, playback_dev_id) tuple
         """
@@ -2388,11 +2213,9 @@ class Lib:
 
     def set_snd_dev(self, capture_dev, playback_dev):
         """Change the current sound devices.
-
         Keyword arguments:
         capture_dev  -- the device ID of capture device to be used
         playback_dev -- the device ID of playback device to be used.
-
         """
         lck = self.auto_lock()
         err = _pjsua.set_snd_dev(capture_dev, playback_dev)
@@ -2401,7 +2224,6 @@ class Lib:
     def set_null_snd_dev(self):
         """Disable the sound devices. This is useful if the system
         does not have sound device installed.
-
         """
         lck = self.auto_lock()
         err = _pjsua.set_null_snd_dev()
@@ -2412,10 +2234,8 @@ class Lib:
 
     def conf_get_max_ports(self):
         """Get the conference bridge capacity.
-
         Return:
             conference bridge capacity.
-
         """
         lck = self.auto_lock()
         return _pjsua.conf_get_max_ports()
@@ -2427,17 +2247,14 @@ class Lib:
         multiple sources are transmitting to the same sink, the media 
         will be mixed together. Source and sink may refer to the same ID, 
         effectively looping the media.
-
         If bidirectional media flow is desired, application needs to call
         this function twice, with the second one having the arguments 
         reversed.
-
         Keyword arguments:
         src_slot    -- integer to identify the conference slot number of
                        the source/transmitter.
         dst_slot    -- integer to identify the conference slot number of    
                        the destination/receiver.
-
         """
         lck = self.auto_lock()
         err = _pjsua.conf_connect(src_slot, dst_slot)
@@ -2445,13 +2262,11 @@ class Lib:
     
     def conf_disconnect(self, src_slot, dst_slot):
         """Disconnect media flow from the source to destination port.
-
         Keyword arguments:
         src_slot    -- integer to identify the conference slot number of
                        the source/transmitter.
         dst_slot    -- integer to identify the conference slot number of    
                        the destination/receiver.
-
         """
         lck = self.auto_lock()
         err = _pjsua.conf_disconnect(src_slot, dst_slot)
@@ -2460,7 +2275,6 @@ class Lib:
     def conf_set_tx_level(self, slot, level):
         """Adjust the signal level to be transmitted from the bridge to 
         the specified port by making it louder or quieter.
-
         Keyword arguments:
         slot        -- integer to identify the conference slot number.
         level       -- Signal level adjustment. Value 1.0 means no level
@@ -2473,7 +2287,6 @@ class Lib:
     def conf_set_rx_level(self, slot, level):
         """Adjust the signal level to be received from the specified port
         (to the bridge) by making it louder or quieter.
-
         Keyword arguments:
         slot        -- integer to identify the conference slot number.
         level       -- Signal level adjustment. Value 1.0 means no level
@@ -2488,10 +2301,8 @@ class Lib:
         specified port. The signal levels are float values from 0.0 to 1.0,
         with 0.0 indicates no signal, and 1.0 indicates the loudest signal
         level.
-
         Keyword arguments:
         slot        -- integer to identify the conference slot number.
-
         Return value:
             (tx_level, rx_level) tuple.
         """
@@ -2506,10 +2317,8 @@ class Lib:
 
     def enum_codecs(self):
         """Return list of codecs supported by pjsua.
-
         Return:
             list of CodecInfo
-
         """
         lck = self.auto_lock()
         ci_list = _pjsua.enum_codecs()
@@ -2522,11 +2331,9 @@ class Lib:
 
     def set_codec_priority(self, name, priority):
         """Change the codec priority.
-
         Keyword arguments:
         name     -- Codec name
         priority -- Codec priority, which range is 0-255.
-
         """
         lck = self.auto_lock()
         err = _pjsua.codec_set_priority(name, priority)
@@ -2534,10 +2341,8 @@ class Lib:
 
     def get_codec_parameter(self, name):
         """Get codec parameter for the specified codec.
-
         Keyword arguments:
         name    -- codec name.
-
         """
         lck = self.auto_lock()
         cp = _pjsua.codec_get_param(name)
@@ -2548,11 +2353,9 @@ class Lib:
 
     def set_codec_parameter(self, name, param):
         """Modify codec parameter for the specified codec.
-
         Keyword arguments:
         name    -- codec name
         param   -- codec parameter.
-
         """
         lck = self.auto_lock()
         err = _pjsua.codec_set_param(name, param._cvt_to_pjsua())
@@ -2562,14 +2365,12 @@ class Lib:
 
     def create_player(self, filename, loop=False):
         """Create WAV file player.
-
         Keyword arguments
         filename    -- WAV file name
         loop        -- boolean to specify whether playback should
                        automatically restart upon EOF
         Return:
             WAV player ID
-
         """
         lck = self.auto_lock()
         opt = 0
@@ -2581,13 +2382,11 @@ class Lib:
         
     def player_get_slot(self, player_id):
         """Get the conference port ID for the specified player.
-
         Keyword arguments:
         player_id  -- the WAV player ID
         
         Return:
             Conference slot number for the player
-
         """
         lck = self.auto_lock()
         slot = _pjsua.player_get_conf_port(player_id)
@@ -2598,11 +2397,9 @@ class Lib:
 
     def player_set_pos(self, player_id, pos):
         """Set WAV playback position.
-
         Keyword arguments:
         player_id   -- WAV player ID
         pos         -- playback position, in samples
-
         """
         lck = self.auto_lock()
         err = _pjsua.player_set_pos(player_id, pos)
@@ -2610,10 +2407,8 @@ class Lib:
         
     def player_destroy(self, player_id):
         """Destroy the WAV player.
-
         Keyword arguments:
         player_id   -- the WAV player ID.
-
         """
         lck = self.auto_lock()
         err = _pjsua.player_destroy(player_id)
@@ -2621,14 +2416,12 @@ class Lib:
 
     def create_playlist(self, filelist, label="playlist", loop=True):
         """Create WAV playlist.
-
         Keyword arguments:
         filelist    -- List of WAV file names.
         label       -- Optional name to be assigned to the playlist
                        object (useful for logging)
         loop        -- boolean to specify whether playback should
                        automatically restart upon EOF
-
         Return:
             playlist_id
         """
@@ -2642,13 +2435,11 @@ class Lib:
 
     def playlist_get_slot(self, playlist_id):
         """Get the conference port ID for the specified playlist.
-
         Keyword arguments:
         playlist_id  -- the WAV playlist ID
         
         Return:
             Conference slot number for the playlist
-
         """
         lck = self.auto_lock()
         slot = _pjsua.player_get_conf_port(playlist_id)
@@ -2659,10 +2450,8 @@ class Lib:
 
     def playlist_destroy(self, playlist_id):
         """Destroy the WAV playlist.
-
         Keyword arguments:
         playlist_id   -- the WAV playlist ID.
-
         """
         lck = self.auto_lock()
         err = _pjsua.player_destroy(playlist_id)
@@ -2670,13 +2459,10 @@ class Lib:
 
     def create_recorder(self, filename):
         """Create WAV file recorder.
-
         Keyword arguments
         filename    -- WAV file name
-
         Return:
             WAV recorder ID
-
         """
         lck = self.auto_lock()
         err, rec_id = _pjsua.recorder_create(filename, 0, None, -1, 0)
@@ -2685,13 +2471,11 @@ class Lib:
         
     def recorder_get_slot(self, rec_id):
         """Get the conference port ID for the specified recorder.
-
         Keyword arguments:
         rec_id  -- the WAV recorder ID
         
         Return:
             Conference slot number for the recorder
-
         """
         lck = self.auto_lock()
         slot = _pjsua.recorder_get_conf_port(rec_id)
@@ -2702,10 +2486,8 @@ class Lib:
 
     def recorder_destroy(self, rec_id):
         """Destroy the WAV recorder.
-
         Keyword arguments:
         rec_id   -- the WAV recorder ID.
-
         """
         lck = self.auto_lock()
         err = _pjsua.recorder_destroy(rec_id)
@@ -2960,4 +2742,3 @@ def _Trace(args):
         for arg in args:
             print arg,
         print " **"
-
